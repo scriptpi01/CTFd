@@ -53,3 +53,12 @@ ENV PATH="/opt/venv/bin:$PATH"
 USER 1001
 EXPOSE 8000
 ENTRYPOINT ["/opt/CTFd/docker-entrypoint.sh"]
+
+
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir psycopg2-binary \  # 👈 เพิ่มบรรทัดนี้
+    && for d in CTFd/plugins/*; do \
+        if [ -f "$d/requirements.txt" ]; then \
+            pip install --no-cache-dir -r "$d/requirements.txt";\
+        fi; \
+    done;
